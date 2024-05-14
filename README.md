@@ -1,4 +1,4 @@
-# Pokemon Sleep Info Wiki by RaenonX (CI Only)
+# Pokemon Sleep Info Wiki by RaenonX (CI)
 
 [![Website](https://img.shields.io/badge/Pokemon%20Sleep%20Info%20Wiki%20by%20RaenonX-white?style=for-the-badge&label=Click%20to%20Access&color=blue)](https://pks.raenonx.cc)
 [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m796789579-41196d253e8cdc9d8876b277?up_message=Online&down_message=Offline&style=for-the-badge&logo=statuspage&cacheSeconds=60)](https://stats.uptimerobot.com/lHxMIpHwjW)
@@ -14,7 +14,7 @@
 > **If you are interested in contributing to the website development, please contact @raenonx on Discord.**
 
 This is now the CI-only repo for [Pokemon Sleep Info Wiki](https://pks.raenonx.cc).
-It was open source, but not anymore, until further notice.
+The core UI repo was open source, but not anymore, until further notice.
 
 This decision was made because some users relentlessly report the website to ad-blockers,
 so they can use the website ads-free, meaning that the developers are working for them, for free.
