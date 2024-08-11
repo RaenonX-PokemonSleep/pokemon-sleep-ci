@@ -13,14 +13,14 @@
 > [!NOTE]  
 > **If you are interested in contributing to the website development, please contact @raenonx on Discord.**
 
-This is now the CI-only repo for [Pokemon Sleep Info Wiki](https://pks.raenonx.cc).
+This is now the CI-only repo for [Pokémon Sleep Info Wiki](https://pks.raenonx.cc).
 The core UI repo was open source, but not anymore, until further notice.
 
 This decision was made because some users relentlessly report the website to ad-blockers,
 so they can use the website ads-free, meaning that the developers are working for them, for free.
 
 We have tried our best to be as open/polite as possible to ask the users to stop reporting us,
-including publishing [this Ads & Credits notice](https://pks.raenonx.cc/en/docs/view/site/ads-and-credits).
+including publishing the [Ads & Credits notice](https://pks.raenonx.cc/en/docs/view/site/ads-and-credits).
 
 We were fine allowing users to use adblock, just keep it under the table.
 However, some users really like to yell it out loud and ask people to use ad-blockers.
