@@ -54,7 +54,7 @@ $Fields = @(
 if ($Environment.ContainsKey("CommitMessage") -and -not [string]::IsNullOrWhiteSpace($Environment.CommitMessage)) {
     $Fields += @{
         "name" = "Commit Message"
-        "value" = $Environment.CommitMessage
+        "value" = "$($Environment.CommitMessage)"
         "inline" = "false"
     }
 }
