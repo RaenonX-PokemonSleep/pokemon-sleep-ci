@@ -20,6 +20,7 @@ function Get-Environment {
         "RequesterId" = "AZ_DEVOPS_REQUESTER_ID"
         "QueuedBy" = "AZ_DEVOPS_QUEUED_BY"
         "QueuedById" = "AZ_DEVOPS_QUEUED_BY_ID"
+        "CommitMessage" = "AZ_DEVOPS_COMMIT_MESSAGE"
     }
 
     $private:EnvVars = @{}
@@ -52,6 +53,11 @@ $DiscordData = @{
                 @{
                     "name" = "Build"
                     "value" = $BuildId
+                    "inline" = "false"
+                }
+                @{
+                    "name" = "Commit Message"
+                    "value" = $Environment.CommitMessage
                     "inline" = "false"
                 }
                 @{
