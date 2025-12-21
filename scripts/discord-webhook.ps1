@@ -27,13 +27,43 @@ function Get-Environment {
 
     foreach ($private:EnvVarEntry in $private:EnvVarMap.GetEnumerator()) {
         $private:EnvVarName = $private:EnvVarEntry.Value
-        $private:EnvVars[$private:EnvVarEntry.Name] = (Get-Item -Path env:/$private:EnvVarName).Value
+        $private:EnvValue = (Get-Item -Path env:/$private:EnvVarName -ErrorAction SilentlyContinue).Value
+        if ($null -ne $private:EnvValue) {
+            $private:EnvVars[$private:EnvVarEntry.Name] = $private:EnvValue
+        }
     }
 
     return $private:EnvVars
 }
 
 $Environment = $(Get-Environment)
+
+$Fields = @(
+    @{
+        "name" = "Status"
+        "value" = $Environment.Status
+        "inline" = "false"
+    }
+    @{
+        "name" = "Build"
+        "value" = $BuildId
+        "inline" = "false"
+    }
+)
+
+if ($Environment.ContainsKey("CommitMessage") -and -not [string]::IsNullOrWhiteSpace($Environment.CommitMessage)) {
+    $Fields += @{
+        "name" = "Commit Message"
+        "value" = $Environment.CommitMessage
+        "inline" = "false"
+    }
+}
+
+$Fields += @{
+    "name" = "Commit Link"
+    "value" = "https://github.com/RaenonX-PokemonSleep/pokemon-sleep-ui-core/commit/$buildHash"
+    "inline" = "false"
+}
 
 $DiscordData = @{
     "timestamp" = [DateTimeOffset]::Now.ToUnixTimeSeconds()
@@ -44,28 +74,7 @@ $DiscordData = @{
             "title" = $Environment.Title
             "color" = $BuildStatusColor[$Environment.Status] ?? [convert]::ToString("0x64748B", 10)
             "url" = $Environment.Url
-            "fields" = @(
-                @{
-                    "name" = "Status"
-                    "value" = $Environment.Status
-                    "inline" = "false"
-                }
-                @{
-                    "name" = "Build"
-                    "value" = $BuildId
-                    "inline" = "false"
-                }
-                @{
-                    "name" = "Commit Message"
-                    "value" = $Environment.CommitMessage
-                    "inline" = "false"
-                }
-                @{
-                    "name" = "Commit Link"
-                    "value" = "https://github.com/RaenonX-PokemonSleep/pokemon-sleep-ui-core/commit/$buildHash"
-                    "inline" = "false"
-                }
-            )
+            "fields" = $Fields
         }
     )
 }
