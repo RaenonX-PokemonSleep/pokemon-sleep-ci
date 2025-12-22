@@ -1,8 +1,29 @@
 # Stop the script execution on any failure
 $ErrorActionPreference = "Stop"
 
-$BuildId = $(git show -s --format="%h-%cI").Trim().Replace(":", "-")
-$BuildHash = $(git show -s --format="%H").Trim()
+# Try to get build info from git, fall back to .next/BUILD_ID file
+$BuildId = $null
+$BuildHash = $null
+
+try {
+    $BuildId = $(git show -s --format="%h-%cI").Trim().Replace(":", "-")
+    $BuildHash = $(git show -s --format="%H").Trim()
+} catch {
+    Write-Host -ForegroundColor Yellow "Git command failed, attempting to read .next/BUILD_ID"
+}
+
+if ([string]::IsNullOrWhiteSpace($BuildId)) {
+    try {
+        $BuildIdFile = ".next/BUILD_ID"
+        if (Test-Path $BuildIdFile) {
+            $BuildId = (Get-Content $BuildIdFile -Raw).Trim()
+            Write-Host -ForegroundColor Yellow "Loaded BuildId from .next/BUILD_ID: $BuildId"
+        }
+    } catch {
+        Write-Host -ForegroundColor Yellow "Failed to read .next/BUILD_ID file"
+    }
+}
+
 $BuildStatusColor = @{
     "Canceled" = [convert]::ToString("0x06B6D4", 10)
     "Succeeded" = [convert]::ToString("0x22C55E", 10)
@@ -44,12 +65,15 @@ $Fields = @(
         "value" = $Environment.Status
         "inline" = "false"
     }
-    @{
+)
+
+if (-not [string]::IsNullOrWhiteSpace($BuildId)) {
+    $Fields += @{
         "name" = "Build"
         "value" = $BuildId
         "inline" = "false"
     }
-)
+}
 
 if ($Environment.ContainsKey("CommitMessage") -and -not [string]::IsNullOrWhiteSpace($Environment.CommitMessage)) {
     $Fields += @{
@@ -59,10 +83,12 @@ if ($Environment.ContainsKey("CommitMessage") -and -not [string]::IsNullOrWhiteS
     }
 }
 
-$Fields += @{
-    "name" = "Commit Link"
-    "value" = "https://github.com/RaenonX-PokemonSleep/pokemon-sleep-ui-core/commit/$buildHash"
-    "inline" = "false"
+if (-not [string]::IsNullOrWhiteSpace($BuildHash)) {
+    $Fields += @{
+        "name" = "Commit Link"
+        "value" = "https://github.com/RaenonX-PokemonSleep/pokemon-sleep-ui-core/commit/$buildHash"
+        "inline" = "false"
+    }
 }
 
 $DiscordData = @{
