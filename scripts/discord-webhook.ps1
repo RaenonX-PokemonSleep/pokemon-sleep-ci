@@ -6,8 +6,8 @@ $BuildId = $null
 $BuildHash = $null
 
 try {
-    $BuildId = $(git show -s --format="%h-%cI").Trim().Replace(":", "-")
-    $BuildHash = $(git show -s --format="%H").Trim()
+    $BuildId = $(git show -s --format="%h-%cI" 2>&1).Trim().Replace(":", "-")
+    $BuildHash = $(git show -s --format="%H" 2>&1).Trim()
 } catch {
     Write-Host -ForegroundColor Yellow "Git command failed, attempting to read .next/BUILD_ID"
 }
