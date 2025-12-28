@@ -83,4 +83,4 @@ if ($json.scripts -and $json.scripts.postinstall) {
     Write-Host "postinstall script removed."
 }
 
-Write-Host -ForegroundColor Green "Standalone deployment built successfully."
+Write-Host -ForegroundColor Green "Standalone deployment built successfully at: $(Get-Item ".next/standalone" | Select-Object -ExpandProperty FullName)"
