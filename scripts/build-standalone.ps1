@@ -43,8 +43,6 @@ $foldersToCopy = @(
     "public",
     # External binaries, primarily for game sync
     ".bin",
-    # Packet encryption
-    ".php",
     # Static assets (chunks)
     ".next/static",
     # Source folder (needed for path resolution in migrations)
