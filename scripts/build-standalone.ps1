@@ -81,4 +81,16 @@ if ($json.scripts -and $json.scripts.postinstall) {
     Write-Host "postinstall script removed."
 }
 
+# Next.js 16 writes a constant 'build-TfctsWXpff2fKS' to .next/BUILD_ID when `deploymentId`
+# is configured (skew protection). Restore the correct build ID (already computed by
+# next.config.ts and stored in required-server-files.json as `config.deploymentId`) so that
+# deployment-site scripts (e.g. discord-webhook.ps1) which fall back to this file still show
+# a meaningful identifier.
+# https://github.com/vercel/next.js/blob/f65b10a54d9abb2ceb3890bcadc22e372f635f88/packages/next/src/build/index.ts#L916
+$DeploymentId = (Get-Content ".next/required-server-files.json" -Raw | ConvertFrom-Json).config.deploymentId
+if (-not [string]::IsNullOrWhiteSpace($DeploymentId)) {
+    Set-Content -Path ".next/BUILD_ID" -Value $DeploymentId -NoNewline
+    Write-Host -ForegroundColor Cyan "Restored .next/BUILD_ID to deployment ID: $DeploymentId"
+}
+
 Write-Host -ForegroundColor Green "Standalone deployment built successfully at: $(Get-Item ".next/standalone" | Select-Object -ExpandProperty FullName)"
