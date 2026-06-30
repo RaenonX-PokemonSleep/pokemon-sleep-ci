@@ -11,6 +11,8 @@ $filesToCopy = @(
     "tsconfig.json",
     # Yarn for dependency install at the deployment site
     ".yarnrc.yml",
+    # Node runtime version to run at the deployment site
+    ".nvmrc",
     # Production hosting config
     "pm2.yml",
     # Cache purging script
