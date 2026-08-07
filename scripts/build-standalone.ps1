@@ -27,6 +27,10 @@ foreach ($sourcePath in $filesToCopy) {
     $destinationPath = ".next/standalone/$sourcePath"
     $destinationDir = Split-Path -Path $destinationPath -Parent
 
+    if (Test-Path -Path $destinationPath) {
+        Remove-Item -LiteralPath $destinationPath -Force
+    }
+
     # Create the parent directory if it doesn't exist
     if ($destinationDir -and -not (Test-Path -Path $destinationDir)) {
         New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
@@ -58,12 +62,13 @@ foreach ($sourcePath in $foldersToCopy) {
 
     $destinationPath = ".next/standalone/$sourcePath"
 
-    # Create the destination directory if it doesn't exist
-    if (-not (Test-Path -Path $destinationPath)) {
-        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+    if (Test-Path -Path $destinationPath) {
+        Remove-Item -LiteralPath $destinationPath -Recurse -Force
     }
 
     if (Test-Path -Path $sourcePath) {
+        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+
         # Copy all contents of the folder
         Copy-Item -Path "$sourcePath/*" -Destination $destinationPath -Recurse -Force
     } else {
