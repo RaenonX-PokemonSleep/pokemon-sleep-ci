@@ -9,7 +9,8 @@ Write-Host -ForegroundColor Cyan "Preparing standalone deployment..."
 $filesToCopy = @(
     # TypeScript config (needed for path alias resolution)
     "tsconfig.json",
-    # Yarn for dependency install at the deployment site
+    # Yarn files for dependency install at the deployment site
+    "yarn.lock",
     ".yarnrc.yml",
     # Node runtime version to run at the deployment site
     ".nvmrc",
