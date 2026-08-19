@@ -41,13 +41,6 @@ Copy-StandaloneFolders -StandaloneRoot $standaloneRoot -SourcePaths @(
     'migrations'
 )
 
-# Calc Server is a separate Bun entry, so Next.js does not trace its runtime dependencies.
-Copy-StandalonePackages -StandaloneRoot $standaloneRoot -NodeModulesRoot 'node_modules' -PackageNames @(
-    'highs',
-    'hono',
-    'zod'
-)
-
 Remove-StandalonePostInstall -StandaloneRoot $standaloneRoot
 Restore-StandaloneBuildId -NextBuildRoot $nextBuildRoot
 
