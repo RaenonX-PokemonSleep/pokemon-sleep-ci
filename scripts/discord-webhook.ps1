@@ -1,15 +1,16 @@
 # Stop the script execution on any failure
 $ErrorActionPreference = "Stop"
 
-# Try to get build info from git, fall back to .next/BUILD_ID file
+$CommitLink = $env:AZ_DEVOPS_COMMIT_LINK
 $BuildId = $null
-$BuildHash = $null
 
-try {
-    $BuildId = $(git show -s --format="%h-%cI" 2>&1).Trim().Replace(":", "-")
-    $BuildHash = $(git show -s --format="%H" 2>&1).Trim()
-} catch {
-    Write-Host -ForegroundColor Yellow "Git command failed, attempting to read .next/BUILD_ID"
+# Failure jobs check out only the CI repository
+if (-not [string]::IsNullOrWhiteSpace($CommitLink)) {
+    $CommitHash = $CommitLink.Split('/')[-1]
+    $CommitBuildId = git show -s --format="%h-%cI" $CommitHash -- 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        $BuildId = $CommitBuildId.Replace(":", "-")
+    }
 }
 
 if ([string]::IsNullOrWhiteSpace($BuildId)) {
@@ -83,10 +84,10 @@ if ($Environment.ContainsKey("CommitMessage") -and -not [string]::IsNullOrWhiteS
     }
 }
 
-if (-not [string]::IsNullOrWhiteSpace($BuildHash)) {
+if (-not [string]::IsNullOrWhiteSpace($CommitLink)) {
     $Fields += @{
         "name" = "Commit Link"
-        "value" = "https://github.com/RaenonX-PokemonSleep/pokemon-sleep-ui-core/commit/$buildHash"
+        "value" = $CommitLink
         "inline" = "false"
     }
 }
